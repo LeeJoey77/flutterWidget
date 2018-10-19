@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'container.dart';//Container
 import 'stateful.dart';//StatefulWidget
 import 'scaffold.dart';//Scaffold
+import 'navigator.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:english_words/english_words.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
       ),
       // home: ContainerWidget(),
-      home: ScaffoldWidget(),
+      // home: ScaffoldWidget(),
+      home: NavigatorSample(),
     );
   }
 }
