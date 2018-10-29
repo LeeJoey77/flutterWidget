@@ -3,6 +3,9 @@ import 'container.dart';//Container
 import 'stateful.dart';//StatefulWidget
 import 'scaffold.dart';//Scaffold
 import 'navigator.dart';
+import 'rowColumnStack.dart';
+
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:english_words/english_words.dart';
@@ -24,20 +27,37 @@ void main() => runApp(new MyApp());
 //3. ViewController, Navigation, Tabbar, 网络请求
 //Widget 的 Key
 
+//[Expanded] 和 [Flexible]
+//填充方式
+
+
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+    
     return new MaterialApp(
       title: 'Welcome to Flutter',
       theme: new ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: Colors.white,
       ),
       // home: ContainerWidget(),
       // home: ScaffoldWidget(),
-      home: NavigatorSample(),
+      // home: NavigatorSample(),
+      home: RowAndColumnSample(),
+      /*
+      home: new ShoppingList(
+        products: <Product>[
+          new Product(name: 'eggs'),
+          new Product(name: 'flour'),
+          new Product(name: 'chocolate chips'),
+        ],
+      ),
+      */
     );
   }
 }
+
 
 
 
