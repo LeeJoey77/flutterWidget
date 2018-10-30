@@ -17,7 +17,7 @@ class RowAndColumnSample extends StatelessWidget {
 /// 
 /// 如果只有一个 child, 使用 [Align] 或 [Center] 去布局
 /// 
-/// Row 的布局顺序
+/// Row 布局顺序:
 /// 1. 根据 unbounded 水平约束, 布局 flex 为 null 或 0 的 child(例如those are not [Expanded]). 
 /// 如果 [crossAxisAlignment] 为[CrossAxisAlignment.stretch], 使用 match 最大高度的 [tight] 
 /// vertical constraint
@@ -84,6 +84,7 @@ Widget _rowSample() {
 
 
 Widget _columnSample() {
+  /*
   return Container(
     color: Colors.white,
     child: Column(
@@ -98,12 +99,12 @@ Widget _columnSample() {
       ],
     ),
   );
-  /**/
-  
+  */
+
   /// 上例中 text 和 logo 都是 center 对齐, 下例中, [crossAxisAlignment] 被设置为
   /// [CrossAxisAlignment.start], 所以 children 为左对齐. [mainAxisSize] 被设置为
   /// [MainAxisSize.min], 所以 column 会 shrink to fit the children
-  /*
+  
   return Container(
     color: Colors.white,
     child: Column(
@@ -111,16 +112,39 @@ Widget _columnSample() {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text('We move under cover and we move as one'),
-        // Text('Through the night, we have one shot to live another day'),
-        // Text('We cannot let a stray gunshot give us away'),
-        // Text('We will fight up close, seize the moment and stay in it'),
-        // Text('It’s either that or meet the business end of a bayonet'),
-        // Text('The code word is ‘Rochambeau,’ dig me?'),
         Text('Rochambeau!'),
       ],
     ),
   );
-  */
+  /**/
+
+  /// 当 vertical constraints 是 unbounded:
+  /// 
+  /// 当一个 [Column] 有一个或多个 [Expanded] 或 [Flexible] children, 并且这个
+  /// [Column] 被置于另一个 [Column] 或 [ListView] 或其它没有给 [Column] 提供
+  /// 最大高度限制的 context, 会抛出一个异常: children flex 为 non-zero, 但是 vertical 
+  /// constraint 为 unbounded.
+  /// 
+  /// 问题在于使用 [Flexible] or [Expanded] 意味着在布局完所有其它 children 后的剩余空间会被平分, 
+  /// 但是如果 vertical constraint 为 unbounded, 剩余的空间为无限
+  /// 
+  /// 解决问题的关键是确定 [Columen] receive unbounded vertical constraint 的原因
+  /// 这种情况发生的常见原因是 [Column] 被置于另一个 [Column], 但是内置的 [Column] 没有使用 [Expanded]
+  /// 或 [Flexible]. 当一个 [Column] 布局 non-flex children(没有使用 [Expanded] 或 [Flexible]的 children),
+  /// 这个 [Column] 会给 children unbounded 的 constraint, 以便它们可以决定自己的大小(传递 UNbounded constraint 
+  /// 通常意味着告诉 child 它应该 shrink-wrap 它的内容).一般来说, 这种情况的解决办法是对内置的 [Column] 使用
+  /// [Expanded] 来表明它应该占据外部 [Column] 剩余的空间, 而不是占据它想要大小的空间
+  ///
+  /// 这个 message 出现的另一个原因是 [Column] 被置于一个 [ListView] 或者其它 vertical scrollable.
+  /// 在这个场景中, vertical space 确实是无限的, 通常需要考虑为什么内置的 [Column] 需要 [Expanded] or [Flexible]
+  /// child, 内部 children 尺寸应该多少? 一般来说, 解决办法是移除内部 children 的 [Expanded] or [Flexible] widgets
+  /// 
+  /// ### 黑黄相间的警示条
+  /// 当 [Column] 的内容超过了可利用的高度, [Column] overflow, contents 被 clipped.
+  /// 
+  /// 通常的解决办法是改用 [ListView]
+  /// 
+  /// Column 布局顺序同 Row
 }
 
 Widget _stackSample() {
