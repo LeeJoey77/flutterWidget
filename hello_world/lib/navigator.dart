@@ -14,7 +14,7 @@ import 'dart:async'; //异步
 /// 虽然可以自己创建 Navigator, 但是最常见的是使用 [WidgetsApp] 或 [MaterialApp]
 /// 创建的 [Navigator], 使用 [Navigator.of] 获取.
 ///
-/// [MaterialApp] 的 [home]: 相当于 rootViewController
+/// [MaterialApp] 的 [home]:
 /// [MaterialApp] 是创建 APP 的最简单的方法, [MaterialApp] 的 [home] 是
 /// [Navigator] 栈中的第一个界面, 即 App 启动后看到的界面
 ///
@@ -221,9 +221,9 @@ class NavigatorSample extends StatelessWidget {
       ),
       home: MyHomePage(title: '首页'),
       routes: <String, WidgetBuilder>{
-        '/a': (BuildContext context) => MyPage(title: 'Page A'),
-        '/b': (BuildContext context) => MyPage(title: 'Page B'),
-        '/c': (BuildContext context) => MyPage(title: 'Page c'),
+        '/a': (context) => MyPage(title: 'Page A'),
+        '/b': (context) => MyPage(title: 'Page B'),
+        '/c': (context) => MyPage(title: 'Page C'),
       },
     );
   }
@@ -244,8 +244,34 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushNamed(context, '/b');
       */
 
+      /* */
+      Navigator.push(context, MaterialPageRoute<void>(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('新的页面')
+            ),
+            body: Padding(
+              padding: EdgeInsets.only(left: 100, top: 200),
+              child: SizedBox(
+                height: 44,
+                width: 100,
+                child: FlatButton(
+                  color: Colors.blue,
+                  child: Text('Button'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ),
+          );
+        }
+      ));
+     
+
       /*
-      Future<String> value = Navigator.of(context).push(new MaterialPageRoute<String>(
+      Future<String> value = Navigator.of(context).push(MaterialPageRoute<String>(
         builder: (BuildContext context) {
           return new Scaffold(
             appBar: new AppBar(
@@ -263,10 +289,9 @@ class _MyHomePageState extends State<MyHomePage> {
               child: new Icon(Icons.replay),
             ),
           );
-           
         },
       ));
-    
+      
       var completer = new Completer<String>.sync();
       var onValue = (String value) {
         if (!completer.isCompleted) {
@@ -281,8 +306,9 @@ class _MyHomePageState extends State<MyHomePage> {
         } 
       };
       value.then(onValue, onError: onError);
-      */
+     */
       
+      /*
       Navigator.push(
           context,
           PageRouteBuilder(
@@ -300,8 +326,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: child,
                   ),
                 );
-              }));
+      }));
+       */
     });
+    
   }
 
   @override
@@ -325,8 +353,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // 根据 name 导航
 class MyPage extends StatefulWidget {
-  MyPage({Key key, this.title}) : super(key: key);
   final String title;
+  MyPage({Key key, this.title}) : super(key: key);
   @override
   _MyPageState createState() => new _MyPageState();
 }
