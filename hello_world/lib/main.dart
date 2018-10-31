@@ -4,7 +4,6 @@ import 'stateful.dart';//StatefulWidget
 import 'scaffold.dart';//Scaffold
 import 'navigator.dart';
 import 'rowColumnStack.dart';
-import 'customwidget.dart';
 
 
 import 'package:flutter/cupertino.dart';
@@ -44,8 +43,9 @@ class MyApp extends StatelessWidget {
       // home: ContainerWidget(),
       // home: ScaffoldWidget(),
       // home: NavigatorSample(),
-      // home: RowAndColumnSample(),
-      home: CustomWidget(),
+      home: RowAndColumnSample(),
+      // home: CustomWidget(),
+      // home: ParentCWidget(),
       /*
       home: new ShoppingList(
         products: <Product>[

@@ -4,8 +4,15 @@ class RowAndColumnSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return _rowSample();
-    return _columnSample();
+    // return _columnSample();
     // return _stackSample();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        // child: _expandedSample(),
+        child: _stackSample(),
+      ),
+    ); 
   }
 }
 
@@ -147,6 +154,68 @@ Widget _columnSample() {
   /// Column 布局顺序同 Row
 }
 
+/// 一个 widget 用来 expands [Row], [Column], or [Flex] 的 child
+/// 使用 [Expanded] widget 让 [Row], [Column], or [Flex] 的 child expand to fill
+/// the available space in the main axis. 
+/// 如果多个 children 是 expanded, the available space 按照 [flex] 的值被划分
+/// 
+/// [Expanded] widget 必须是 [Row], [Column], or [Flex] 的 descendant, 并且从 
+/// [Expanded] widget 所在 [Row], [Column], or [Flex] 的路径必须都是[StatelessWidget]s
+/// or [StatefulWidget]s, 不能是其它 widget, 例如[RenderObjectWidget]s
+///  
+/// 
+Widget _expandedSample() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      Expanded(
+        flex: 1,
+        child: Icon(Icons.email),
+      ),
+      Image.asset('image/Swiss-flag.jpg',
+        height: 100,
+        width: 100,
+        fit: BoxFit.fill,
+      ),
+      Expanded(
+        child: Text('mainAxisAlignmentmainAxisAlignmentmainAxisAlignmentmainAxisAlignment', style: TextStyle(fontSize: 15),),
+      ),
+    ],
+  );
+}
+
+/// Stack: 根据 box edges 布局 children 的 widget
+/// 
+/// 适用于 overlap 的 children 布局.
+/// 
+/// [Stack] 的 child 要么是 _positioned_ 要么是 _non-positioned_:
+/// 
+/// Positioned children 是 wrap 在[Positioned] widget(至少一个属性不为 null) 中的 children.
+/// 
+/// stack sizes itself to contain 所有 non-positioned children, non-positioned children
+/// 根据 [alignment] 布局(在 left-to-right 语境中默认在左上角, 在 right-to-left 语境中默认在
+/// 右上角.) 然后根据 top, right, bottom, left 布局 positioned children.
+/// 
+/// stack 将第一个 child 绘制在底部, 如果想改变绘制顺序, 需要改变 children 顺序 重建 stack.
+/// 如果以这种方式给 children 重新排序, 要给 children 一个 non-null 的 key. 这些 key 使
+/// framework 将 children 移到新的位置, 而不是在新位置重新创建它们.
+/// 
+/// 如果想要以某种 pattern 布局大量 children, 或者想自定义 layout manager, 可以使用 
+/// [CustomMultiChildLayout]. 特别是, 当不能根据 children 自身 size 或 stack size 
+/// 布局 children 时.
+/// 
 Widget _stackSample() {
-  return Stack();
+  return Stack(
+    alignment: Alignment.center,
+    children: <Widget>[
+      Image.asset('image/Swiss-flag.jpg',
+        width: 100,
+        height: 100,
+        fit: BoxFit.fill,
+      ),
+      Text('afdafdaflanfalfknvmnv', style: TextStyle(fontSize: 15),)
+    ],
+  );
 }
