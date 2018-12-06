@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async'; //异步
+import 'dart:io';
+import 'dart:convert';
 
 /// Navigator 定义:
-/// 一个使用 Stack discipline 来管理子 Widget 的 Widget
+/// 使用 Stack 来管理子 Widget 的 child widgets
 ///
 /// ## Using the Navigator
 ///
@@ -11,12 +13,12 @@ import 'dart:async'; //异步
 ///
 /// ### Displaying a full-screen route
 ///
-/// 虽然可以自己创建 Navigator, 但是最常见的是使用 [WidgetsApp] 或 [MaterialApp]
-/// 创建的 [Navigator], 使用 [Navigator.of] 获取.
+/// 虽然可以直接创建 Navigator, 但是最常见的是使用 [WidgetsApp] 或 [MaterialApp] 创建的
+/// [Navigator], 使用 [Navigator.of] 获取.
 ///
 /// [MaterialApp] 的 [home]:
-/// [MaterialApp] 是创建 APP 的最简单的方法, [MaterialApp] 的 [home] 是
-/// [Navigator] 栈中的第一个界面, 即 App 启动后看到的界面
+/// [MaterialApp] 是创建 APP 的最简单的方法, [MaterialApp] 的 [home] 是位于
+/// [Navigator] 栈底的 route, 即 App 启动后看到的界面
 ///
 /// PUSH 方法:
 /// 要 push 到一个新的 route, 可以用 builder function 创建一个 [MaterialPageRoute] 的实例
@@ -48,17 +50,17 @@ import 'dart:async'; //异步
 /// ```dart
 /// Navigator.pop(context);
 /// ```
-/// 对于 Scaffold, 通常不需要提供一个 widget 来 pop 界面, 因为 Scaffold 在 AppBar 上
+/// 对于有 Scaffold 的 route, 通常不需要提供一个 widget 来 pop 界面, 因为 Scaffold 在 AppBar 上
 /// 自动添加了一个返回按钮
 ///
 /// ### Using named navigator routes
 ///
-/// APP 通常有很多 routes, 找到它们最简单的方法是根据名字. 按照惯例, Route 名使用类似
-/// 路径的结构('/a/b/c'), APP 的 home page route 默认为 '/'
+/// APP 通常有很多 routes, 找到它们最简单的方法是根据名字. 根据惯例, Route 名使用类似
+/// 路径的结构('/a/b/c'), APP 的 home page route 的名字默认为 '/'
 ///
-/// [MaterialApp] 可以由 [Map<String, WidgetBuilder>] 创建, Map 将 route name 和
-/// 创建它的 builder function 相匹配, [MaterialApp] 用这个 map 为它的 navigator's
-/// [onGenerateRoute] 的会回调创造一个值
+/// [MaterialApp] 可以由 [Map<String, WidgetBuilder>] 创建(即 routes 属性),
+/// [MaterialApp] 用这个 map 为它的 navigator's [onGenerateRoute] 的回调创造一个值
+///
 ///
 /// ```dart
 /// void main() {
@@ -237,14 +239,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _openNewPage() {
-    setState(() {
-      /*
+  //从第二个界面往第一个界面传值
+  var _str = '';
+  void _openNewPage() async {
+    /*
       //根据 name 导航
       Navigator.pushNamed(context, '/b');
       */
 
-      /* */
+    /* 
       Navigator.push(context, MaterialPageRoute<void>(
         builder: (context) {
           return Scaffold(
@@ -268,47 +271,29 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         }
       ));
-     
+      */
+    /* */
 
-      /*
-      Future<String> value = Navigator.of(context).push(MaterialPageRoute<String>(
-        builder: (BuildContext context) {
-          return new Scaffold(
-            appBar: new AppBar(
-              title: new Text('新的页面')
+    _str = await Navigator.of(context).push(MaterialPageRoute<String>(
+      builder: (BuildContext context) {
+        return new Scaffold(
+          appBar: new AppBar(title: new Text('新的页面')),
+          body: new Center(
+            child: new Text(
+              '点击浮动按钮返回',
             ),
-            body: new Center(
-              child: new Text(
-                '点击浮动按钮返回首页',
-              ),
-            ),
-            floatingActionButton: new FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).pop('string');
-              },
-              child: new Icon(Icons.replay),
-            ),
-          );
-        },
-      ));
-      
-      var completer = new Completer<String>.sync();
-      var onValue = (String value) {
-        if (!completer.isCompleted) {
-          print(value);
-          completer.complete(value);
-        } 
-      };
-      var onError = (error, stack) {
-        if (!completer.isCompleted) {
-          completer.completeError(error, stack);
-          print(error);
-        } 
-      };
-      value.then(onValue, onError: onError);
-     */
-      
-      /*
+          ),
+          floatingActionButton: new FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pop('string');
+            },
+            child: new Icon(Icons.replay),
+          ),
+        );
+      },
+    ));
+
+    /*
       Navigator.push(
           context,
           PageRouteBuilder(
@@ -328,8 +313,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
       }));
        */
-    });
-    
   }
 
   @override
@@ -340,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: new Center(
         child: new Text(
-          '点击浮动按钮打开新页面',
+          '点击浮动按钮打开新页面$_str',
         ),
       ),
       floatingActionButton: new FloatingActionButton(

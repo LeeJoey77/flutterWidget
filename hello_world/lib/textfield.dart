@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:dio/dio.dart';
+import 'dart:io';
+import 'dart:convert';
 
 /// onChanged text 改变时被调用, onSubmitted 点击按钮结束输入时调用.
 /// [controller] 控制 text, 例如设置初始值, 控制选中, 组合(composing).
@@ -41,7 +43,7 @@ class _TextFieldSampleState extends State<TextFieldSample> {
           padding: EdgeInsets.only(left: 30, right: 30, top: 350),
           child: TextField(
             onChanged: (str) {
-
+              // _getData();
             },
             // onSubmitted: widget.onChanged,
             controller: _controller,
@@ -66,6 +68,23 @@ class _TextFieldSampleState extends State<TextFieldSample> {
     );
   }
 
+  void _getData() async {
+   
+  var httpClient = HttpClient();
+  var uri = Uri.http('117.139.13.231:26840', 'rest/project/app/queryProjectList');
+  var request = await httpClient.getUrl(uri);
+  var response = await request.close();
+  var responseBody = await response.transform(utf8.decoder).join();
+  
+
+  Future<HttpClientRequest> future = httpClient.getUrl(uri);
+  future.then((value) => (value) {
+    print(value);
+  })
+  .catchError((error) => (error) {
+    print(error);
+  });
+}
   
 }
 
