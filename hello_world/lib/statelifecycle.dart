@@ -116,7 +116,7 @@ class _FDInputWidgetState extends State<FDInputWidget> {
   void dispose() {
     print('dispose');
     _focusNode.removeListener(_focusNodeListener); // 页面消失时必须取消这个listener！！
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver();
     super.dispose();
   }
 

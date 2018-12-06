@@ -89,4 +89,5 @@ void _getData() async {
   Response<Map> response=await dio.get("http://117.139.13.231:26840/rest/auth/logout");
   print(response.data);
   
+  
 }
